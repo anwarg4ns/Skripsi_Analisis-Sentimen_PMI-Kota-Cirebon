@@ -11,18 +11,21 @@ Aplikasi web untuk menganalisis sentimen ulasan masyarakat terhadap pelayanan PM
 
 ## Cara kerja aplikasi
 
-```mermaid
-flowchart LR
-    A[CSV ulasan] --> B[Preprocessing teks]
-    B --> C[dataset_pmi_clean.csv]
-    C --> D[TF-IDF]
-    D --> E[SMOTE + Multinomial Naive Bayes]
-    E --> F[Model & vectorizer .pkl]
-    C --> G[MySQL: tabel_ulasan]
-    G --> H[Dashboard Streamlit]
-    F --> H
-    I[Input ulasan pengguna] --> B
-    B --> F
+```text
+CSV ulasan
+    │
+    ▼
+Preprocessing teks ──► dataset_pmi_clean.csv ──► TF-IDF
+    ▲                                              │
+    │                                              ▼
+Input ulasan pengguna                    SMOTE + Multinomial Naive Bayes
+                                                   │
+                              ┌────────────────────┴────────────────────┐
+                              ▼                                         ▼
+                    Model + vectorizer (.pkl)                 MySQL tabel_ulasan
+                              └────────────────────┬────────────────────┘
+                                                   ▼
+                                      Dashboard Streamlit
 ```
 
 Secara ringkas, data ulasan dibersihkan melalui *cleaning*, *case folding*, tokenisasi, penghapusan stopword, dan stemming dengan Sastrawi. Dataset bersih digunakan untuk melatih model. Aplikasi Streamlit membaca data ulasan dari MySQL dan menggunakan model tersimpan untuk memprediksi ulasan baru.
